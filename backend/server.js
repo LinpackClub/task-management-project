@@ -9,12 +9,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.log(err));
+const mongoUri = process.env.MONGO_URI;
+if (mongoUri) {
+  mongoose.connect(mongoUri)
+    .then(() => console.log("MongoDB connected"))
+    .catch(err => console.error("MongoDB connection error:", err));
+} else {
+  console.warn("Warning: MONGO_URI is not set. Skipping MongoDB connection.");
+}
 
 app.get("/", (req, res) => {
   res.send("Backend running...");
 });
 
-app.listen(5000, () => console.log("Server started on port 5000"));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
