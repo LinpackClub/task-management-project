@@ -1,13 +1,22 @@
 import React from 'react';
-import Dashboard from './components/Dashboard';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import TaskDetail from './pages/TaskDetail';
+import TeamManagement from './pages/TeamManagement';
 import './App.css';
 import './components/styles.css';
 
 function App() {
   return (
-    <div className="App">
-      <Dashboard />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/tasks/:id" element={<TaskDetail />} />
+        <Route path="/teams" element={<TeamManagement />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+    </Router>
   );
 }
 
