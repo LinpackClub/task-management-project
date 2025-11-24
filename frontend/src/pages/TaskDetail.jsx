@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import TopHeader from '../components/TopHeader'; // Import TopHeader
 
 const TaskDetail = () => {
   const { id } = useParams();
   const [comments, setComments] = useState('');
+  
+  // Dummy function for TopHeader props that aren't needed on this page
+  const noop = () => {}; 
 
   const task = {
     id: 'PROJ-123',
@@ -44,37 +48,25 @@ Acceptance Criteria: All widgets must be responsive and update in real-time with
 
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark">
-      {/* Header */}
-      <header className="sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span className="material-symbols-outlined text-2xl text-slate-800 dark:text-slate-200">
-              task_alt
-            </span>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">TaskFlow</h2>
-          </div>
-          <div className="flex gap-2">
-            <button className="flex items-center justify-center w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700">
-              <span className="material-symbols-outlined">notifications</span>
-            </button>
-            <button className="flex items-center justify-center w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700">
-              <span className="material-symbols-outlined">help</span>
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* Header (Using TopHeader component) */}
+      <TopHeader 
+        // Setting showBackButton to true displays the FlowTask logo/name and back arrow
+        showBackButton={true} 
+        onAddTask={noop} 
+        onMenuClick={noop}
+      />
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Page Heading */}
         <div className="border-b border-slate-200 dark:border-slate-800 pb-6 mb-8">
-          <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div className="flex-1">
               <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">{task.title}</h1>
-                <p className="text-3xl font-light text-slate-500 dark:text-slate-400">#{task.id}</p>
+                <h1 className="text-xl sm:text-3xl font-bold text-slate-900 dark:text-slate-50">{task.title}</h1>
+                <p className="text-xl sm:text-3xl font-light text-slate-500 dark:text-slate-400">#{task.id}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 shrink-0">
               <button className="flex h-8 items-center justify-center gap-2 rounded-lg bg-blue-600/10 dark:bg-blue-400/20 px-3">
                 <span className="material-symbols-outlined text-blue-600 dark:text-blue-400">
                   autorenew

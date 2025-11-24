@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-const Sidebar = () => {
+const Sidebar = ({ isMobileOpen, onClose }) => {
   const location = useLocation();
 
   const menuItems = [
@@ -13,10 +13,18 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-64 h-full border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-4 flex flex-col justify-between overflow-y-auto">
+    <aside className={`
+        fixed inset-y-0 left-0 z-40 w-64 h-full
+        border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-4 
+        flex flex-col justify-between overflow-y-auto
+        transition-transform duration-300 ease-in-out
+        lg:translate-x-0 lg:static lg:border-r
+        ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}
+    >
       <div className="flex flex-col gap-8">
-        {/* Logo */}
-        <div className="flex items-center gap-2 px-3">
+        {/* Logo (Updated: Hidden on mobile since TopHeader now displays it) */}
+        <div className="hidden lg:flex items-center gap-2 px-3">
           <div className="w-6 h-6 text-primary">
             <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -40,6 +48,7 @@ const Sidebar = () => {
             <Link
               key={item.path}
               to={item.path}
+              onClick={onClose} // Close sidebar on nav item click
               className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-colors ${
                 location.pathname === item.path
                   ? 'bg-primary/10 dark:bg-primary/20 text-primary dark:text-white'
