@@ -5,8 +5,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import './App.css';
 import './components/styles.css';
-import './components/auth.css';
-import { AuthProvider } from './auth/AuthProvider';
+import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './auth/ProtectedRoute';
 
 function App() {

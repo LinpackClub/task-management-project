@@ -1,5 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
+// Simple AuthContext placeholder. The original Supabase-backed implementation
+// can replace this file later. This provides the same interface used
+// throughout the app: `AuthProvider` and `useAuth`.
+
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -28,10 +32,7 @@ export const AuthProvider = ({ children }) => {
   }, [user, token]);
 
   const login = async ({ email, password }) => {
-    // Replace this mock with real API call
-    if (!email || !password) {
-      throw new Error('Missing credentials');
-    }
+    if (!email || !password) throw new Error('Missing credentials');
     const mockToken = 'mock-token';
     const mockUser = { name: email.split('@')[0], email };
     setToken(mockToken);
@@ -40,10 +41,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signup = async ({ name, email, password }) => {
-    // Replace this mock with real API call
-    if (!email || !password || !name) {
-      throw new Error('Missing fields');
-    }
+    if (!name || !email || !password) throw new Error('Missing fields');
     const mockToken = 'mock-token';
     const mockUser = { name, email };
     setToken(mockToken);
@@ -57,14 +55,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('auth');
   };
 
-  const value = {
-    user,
-    token,
-    login,
-    signup,
-    logout,
-    isAuthenticated: !!token
-  };
+  const value = { user, token, login, signup, logout, isAuthenticated: !!token };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
