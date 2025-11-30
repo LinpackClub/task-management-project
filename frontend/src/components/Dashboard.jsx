@@ -5,7 +5,6 @@ import SummaryCard from './SummaryCard';
 import KanbanColumn from './KanbanColumn';
 
 const Dashboard = () => {
-  // Mock data - replace with actual API calls
   const summaryData = {
     todo: 4,
     inProgress: 12,

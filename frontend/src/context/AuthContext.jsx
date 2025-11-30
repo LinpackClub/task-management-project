@@ -1,69 +1,73 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import { supabase } from '../utils/supabaseClient'
 
-// Simple AuthContext placeholder. The original Supabase-backed implementation
-// can replace this file later. This provides the same interface used
-// throughout the app: `AuthProvider` and `useAuth`.
+const AuthContext = createContext({})
 
-const AuthContext = createContext(null);
-
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+export function AuthProvider({ children }) {
+  const [session, setSession] = useState(null)
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem('auth');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        setUser(parsed.user || null);
-        setToken(parsed.token || null);
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data?.session ?? null)
+      setUser(data?.session?.user ?? null)
+      setLoading(false)
+    })
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, currentSession) => {
+      setSession(currentSession)
+      setUser(currentSession?.user ?? null)
+    })
+
+    return () => {
+      listener.subscription.unsubscribe()
+    }
+  }, [])
+
+  const signUp = async (email, password) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password
+    })
+    return { data, error }
+  }
+
+  const signIn = async (email, password) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    })
+    return { data, error }
+  }
+
+  const signInWithGoogle = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin + '/auth/callback'
       }
-    } catch (e) {
-      // ignore parse errors
-    }
-  }, []);
+    })
+    return { data, error }
+  }
 
-  useEffect(() => {
-    if (user || token) {
-      localStorage.setItem('auth', JSON.stringify({ user, token }));
-    } else {
-      localStorage.removeItem('auth');
-    }
-  }, [user, token]);
+  const signOut = async () => {
+    await supabase.auth.signOut()
+  }
 
-  const login = async ({ email, password }) => {
-    if (!email || !password) throw new Error('Missing credentials');
-    const mockToken = 'mock-token';
-    const mockUser = { name: email.split('@')[0], email };
-    setToken(mockToken);
-    setUser(mockUser);
-    return { user: mockUser, token: mockToken };
-  };
+  const value = { 
+    user, 
+    session, 
+    loading,
+    signUp,
+    signIn,
+    signInWithGoogle,
+    signOut
+  }
 
-  const signup = async ({ name, email, password }) => {
-    if (!name || !email || !password) throw new Error('Missing fields');
-    const mockToken = 'mock-token';
-    const mockUser = { name, email };
-    setToken(mockToken);
-    setUser(mockUser);
-    return { user: mockUser, token: mockToken };
-  };
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
 
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem('auth');
-  };
-
-  const value = { user, token, login, signup, logout, isAuthenticated: !!token };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-export const useAuth = () => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
-  return ctx;
-};
-
-export default AuthProvider;
+export function useAuth() {
+  return useContext(AuthContext)
+}
