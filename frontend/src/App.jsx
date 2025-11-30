@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Dashboard from './pages/Dashboard';
 import TaskDetail from './pages/TaskDetail';
 import TeamManagement from './pages/TeamManagement';
+import TeamDetail from './pages/TeamDetail';
 import './App.css';
 import './components/styles.css';
 
@@ -14,6 +15,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/tasks/:id" element={<TaskDetail />} />
         <Route path="/teams" element={<TeamManagement />} />
+        <Route path="/teams/:teamName" element={<TeamDetail />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </Router>

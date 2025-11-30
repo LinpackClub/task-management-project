@@ -8,6 +8,7 @@ import NewTaskModal from '../components/NewTaskModal';
 
 const Dashboard = () => {
   const [showModal, setShowModal] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // New state for mobile sidebar
 
   const summaryData = [
     { title: 'Total Tasks', value: 124, change: '+5% this week', color: 'text-green-500' },
@@ -18,10 +19,27 @@ const Dashboard = () => {
 
   return (
     <div className="flex h-screen bg-background-light dark:bg-background-dark">
-      <Sidebar />
+      {/* Mobile Sidebar Overlay (New) */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar - passing state control props */}
+      <Sidebar 
+        isMobileOpen={isSidebarOpen} 
+        onClose={() => setIsSidebarOpen(false)} 
+      />
+      
       <main className="flex-1 overflow-y-auto">
-        <TopHeader onAddTask={() => setShowModal(true)} />
-        <div className="p-8">
+        {/* Pass onMenuClick to toggle sidebar */}
+        <TopHeader 
+          onAddTask={() => setShowModal(true)} 
+          onMenuClick={() => setIsSidebarOpen(true)} 
+        />
+        <div className="p-4 sm:p-8"> {/* Adjusted padding for mobile */}
           {/* Stats Section */}
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {summaryData.map((stat, idx) => (
@@ -30,7 +48,7 @@ const Dashboard = () => {
           </div>
 
           {/* Kanban Board */}
-          <h2 className="mt-10 text-[22px] font-bold tracking-tight text-slate-900 dark:text-slate-50">
+          <h2 className="mt-8 sm:mt-10 text-[22px] font-bold tracking-tight text-slate-900 dark:text-slate-50">
             Tasks Board
           </h2>
           <div className="mt-4">
