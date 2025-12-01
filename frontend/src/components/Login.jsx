@@ -55,48 +55,68 @@ const Login = () => {
 
         {/* Right form */}
         <div className="p-8 md:p-12 flex items-center justify-center bg-white md:bg-transparent" style={{display:'flex',alignItems:'center',justifyContent:'center',padding:'32px'}}>
-          <div className="w-full max-w-md bg-white md:bg-slate-800/90 md:backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg md:shadow-2xl text-slate-900 md:text-white" style={{width:'100%',maxWidth:420,background:'#ffffff',borderRadius:18,padding:24,boxShadow:'0 12px 40px rgba(2,6,23,0.12)'}}>
-            <h2 className="text-2xl font-extrabold mb-1">Sign in to your account</h2>
-            <p className="text-sm text-slate-500 md:text-slate-300 mb-6">Use your email and password to sign in securely.</p>
-
-            <form className="space-y-4" onSubmit={handleSubmit} aria-describedby={error ? 'login-error' : undefined}>
-              {error && <div id="login-error" className="text-red-500 font-semibold" role="alert">{error}</div>}
-
-              <div>
-                <label htmlFor="login-email" className="block text-sm font-medium">Email</label>
-                <div className="relative mt-2">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 md:text-slate-300"><Mail size={18} /></span>
-                  <input id="login-email" className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 md:border-transparent bg-white md:bg-slate-700 text-slate-900 md:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 transition" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" aria-required="true" style={{width:'100%',padding:'12px 14px',paddingLeft:40,borderRadius:12,border:'1px solid rgba(139,92,246,0.12)',background:'#fff'}} />
+          <div className="w-full max-w-md mx-auto">
+            <div className="bg-white rounded-xl shadow-2xl p-8">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-gray-900">Sign in to your account</h2>
+                <p className="mt-2 text-gray-600">Use your email and password to sign in securely.</p>
+              </div>
+              
+              {error && (
+                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-red-800 text-sm">{error}</p>
                 </div>
-              </div>
+              )}
 
-              <div>
-                <label htmlFor="login-password" className="block text-sm font-medium">Password</label>
-                <div className="relative mt-2">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 md:text-slate-300"><Lock size={18} /></span>
-                  <input id="login-password" className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 md:border-transparent bg-white md:bg-slate-700 text-slate-900 md:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 transition" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" aria-required="true" style={{width:'100%',padding:'12px 14px',paddingLeft:40,borderRadius:12,border:'1px solid rgba(139,92,246,0.12)',background:'#fff'}} />
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    Email
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
+                    placeholder="Enter your email"
+                  />
                 </div>
+
+                <div>
+                  <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                    Password
+                  </label>
+                  <input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
+                    placeholder="Enter your password"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200"
+                >
+                  {loading ? 'Signing in...' : 'Sign in'}
+                </button>
+              </form>
+
+              <div className="mt-6 text-center">
+                <p className="text-gray-600">
+                  Don't have an account?{' '}
+                  <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-medium">
+                    Sign up
+                  </Link>
+                </p>
               </div>
-
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-2"><input type="checkbox" checked={remember} onChange={e => setRemember(e.target.checked)} className="w-4 h-4" /> <span className="text-sm">Remember me</span></label>
-                <a href="#" onClick={(e) => e.preventDefault()} className="text-violet-500">Forgot?</a>
-              </div>
-
-              <button type="submit" className="w-full py-3 rounded-xl font-extrabold text-white bg-gradient-to-r from-violet-600 to-indigo-500 hover:scale-[1.01] transform transition shadow-md" disabled={loading} style={{width:'100%',padding:'12px',borderRadius:12,background:'linear-gradient(90deg,var(--accent-2), var(--accent), #4f46e5)',color:'#fff',fontWeight:700,border:'none'}}>{loading ? 'Signing in…' : 'Sign In'}</button>
-
-              <div className="flex items-center gap-3 mt-2">
-                <div className="flex-1 h-px bg-slate-200 md:bg-slate-700" />
-                <div className="text-xs text-slate-400">or</div>
-                <div className="flex-1 h-px bg-slate-200 md:bg-slate-700" />
-              </div>
-
-              <div className="mt-3 flex justify-center">
-                <button type="button" className="w-full md:w-3/4 py-2 rounded-xl border border-slate-200 md:border-slate-700 text-sm flex items-center justify-center gap-2 bg-white md:bg-slate-700 text-slate-900 md:text-white" style={{background:'#fff',color:'#111'}}>Continue with Google</button>
-              </div>
-            </form>
-
-            <div className="text-sm text-slate-500 md:text-slate-300 mt-5 text-center">Don’t have an account? <Link to="/signup" className="text-violet-400 font-semibold">Create one</Link></div>
+            </div>
           </div>
         </div>
       </div>

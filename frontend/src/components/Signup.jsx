@@ -37,46 +37,66 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-sky-50 to-white p-6">
-      <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg grid md:grid-cols-2 overflow-hidden">
-        <div className="bg-sky-100 p-10 flex flex-col justify-center gap-6">
-          <div className="text-sky-700 font-extrabold text-xl">Task Manager</div>
-          <h3 className="text-2xl font-bold text-slate-800">Create your account</h3>
-          <p className="text-slate-600">Start organizing tasks and collaborating with your team.</p>
-          <div className="mt-6 rounded-lg bg-white/20 h-36 flex items-center justify-center text-3xl">🗂️</div>
+    <div className="w-full max-w-md mx-auto">
+      <div className="bg-white rounded-xl shadow-2xl p-8">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-900">Create your account</h2>
+          <p className="mt-2 text-gray-600">Join us and start managing your tasks efficiently.</p>
         </div>
+        
+        {error && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-800 text-sm">{error}</p>
+          </div>
+        )}
 
-        <div className="p-8 md:p-10 flex flex-col justify-center">
-          <h2 className="text-2xl font-extrabold text-slate-900 mb-2">Create account</h2>
-          <div className="text-sm text-slate-500 mb-6">Use your email to register</div>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
+              placeholder="Enter your email"
+            />
+          </div>
 
-          <form className="space-y-4" onSubmit={handleSubmit} aria-describedby={error ? 'signup-error' : undefined}>
-            {error && <div id="signup-error" className="text-red-600 font-semibold" role="alert">{error}</div>}
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
+              placeholder="Enter your password"
+            />
+          </div>
 
-            <div>
-              <label htmlFor="signup-name" className="block text-sm font-semibold text-slate-700">Full name</label>
-              <input id="signup-name" className="w-full mt-2 px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:outline-none focus:ring-4 focus:ring-sky-200" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" aria-required="true" />
-            </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200"
+          >
+            {loading ? 'Creating account...' : 'Sign up'}
+          </button>
+        </form>
 
-            <div>
-              <label htmlFor="signup-email" className="block text-sm font-semibold text-slate-700">Email</label>
-              <input id="signup-email" className="w-full mt-2 px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:outline-none focus:ring-4 focus:ring-sky-200" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" aria-required="true" />
-            </div>
-
-            <div>
-              <label htmlFor="signup-password" className="block text-sm font-semibold text-slate-700">Password</label>
-              <input id="signup-password" className="w-full mt-2 px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:outline-none focus:ring-4 focus:ring-sky-200" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Create a password" aria-required="true" />
-            </div>
-
-            <div>
-              <label htmlFor="signup-confirm" className="block text-sm font-semibold text-slate-700">Confirm password</label>
-              <input id="signup-confirm" className="w-full mt-2 px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:outline-none focus:ring-4 focus:ring-sky-200" type="password" value={confirm} onChange={e => setConfirm(e.target.value)} placeholder="Repeat password" aria-required="true" />
-            </div>
-
-            <button type="submit" className="w-full py-3 rounded-lg font-extrabold text-white bg-gradient-to-r from-sky-500 to-cyan-400 disabled:opacity-60" disabled={loading}>{loading ? 'Creating…' : 'Create account'}</button>
-          </form>
-
-          <div className="text-sm text-slate-500 mt-4">Already have an account? <Link to="/login" className="text-sky-600">Sign in</Link></div>
+        <div className="mt-6 text-center">
+          <p className="text-gray-600">
+            Already have an account?{' '}
+            <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">
+              Sign in
+            </Link>
+          </p>
         </div>
       </div>
     </div>
