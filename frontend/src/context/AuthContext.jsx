@@ -8,38 +8,15 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // Load auth from storage
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem("auth");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        setUser(parsed.user || null);
-        setToken(parsed.token || null);
-      }
-    } catch (e) {
-      console.error("Auth parse error", e);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Persist auth
-  useEffect(() => {
-    if (token) {
-      localStorage.setItem(
-        "auth",
-        JSON.stringify({ user, token })
-      );
-    } else {
-      localStorage.removeItem("auth");
+    // Get initial session
     supabase.auth.getSession().then(({ data }) => {
       setSession(data?.session ?? null)
       setUser(data?.session?.user ?? null)
       setLoading(false)
     })
 
-    // Listen for changes
+    // Listen for auth changes
     const { data: listener } = supabase.auth.onAuthStateChange((_event, currentSession) => {
       setSession(currentSession)
       setUser(currentSession?.user ?? null)
@@ -49,72 +26,8 @@ export function AuthProvider({ children }) {
     return () => {
       listener.subscription.unsubscribe()
     }
-  }, [token])
+  }, [])
 
-  const login = async ({ email, password }) => {
-    if (!email || !password) {
-      throw new Error("Missing credentials");
-    }
-
-    // mock login
-    const mockToken = "mock-token";
-    const mockUser = {
-      name: email.split("@")[0],
-      email
-    };
-
-    setUser(mockUser);
-    setToken(mockToken);
-
-    return { user: mockUser, token: mockToken };
-  };
-
-  const signup = async ({ name, email, password }) => {
-    if (!name || !email || !password) {
-      throw new Error("Missing fields");
-    }
-
-    const mockToken = "mock-token";
-    const mockUser = { name, email };
-
-    setUser(mockUser);
-    setToken(mockToken);
-
-    return { user: mockUser, token: mockToken };
-  };
-
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem("auth");
-  };
-
-  const value = {
-    user,
-    token,
-    isAuthenticated: !!token,
-    login,
-    signup,
-    logout
-  };
-
-  // prevent route flicker
-  if (loading) return null;
-
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = () => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) {
-    throw new Error("useAuth must be used within AuthProvider");
-  }
-  return ctx;
-};
   const signUp = async (email, password) => {
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -149,12 +62,10 @@ export const useAuth = () => {
     user, 
     session, 
     loading,
-    // FIX: Add isAuthenticated derived state
     isAuthenticated: !!session,
     signUp,
     signIn,
     signInWithGoogle,
-    // FIX: Alias signOut to logout for compatibility with App.jsx
     logout: signOut,
     signOut
   }
