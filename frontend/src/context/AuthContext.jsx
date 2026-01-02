@@ -47,7 +47,7 @@ export function AuthProvider({ children }) {
     return () => {
       listener.subscription.unsubscribe()
     }
-  }, [])
+  }, [token])
 
   const login = async ({ email, password }) => {
     if (!email || !password) {
