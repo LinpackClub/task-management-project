@@ -563,18 +563,6 @@ body[data-theme="dark"] input::placeholder{
   color:#64748b;
 }
 
-/* ===== Dark Mode: Text & Empty States ===== */
-body[data-theme="dark"] h1,
-body[data-theme="dark"] h2,
-body[data-theme="dark"] h3{
-  color:#f8fafc;
-}
-
-body[data-theme="dark"] p,
-body[data-theme="dark"] span{
-  color:#cbd5f5;
-}
-
 body[data-theme="dark"] .empty-state{
   border-color:#334155;
 }
