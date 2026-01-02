@@ -5,22 +5,12 @@ import SummaryCard from "./SummaryCard";
 import KanbanColumn from "./KanbanColumn";
 
 const Dashboard = () => {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Design dashboard UI",
-      description: "Create clean layout and blue theme",
-      status: "todo",
-      priority: "high"
-    },
-    {
-      id: 2,
-      title: "Setup routing",
-      description: "Connect dashboard and tasks page",
-      status: "inProgress",
-      priority: "medium"
-    }
-  ]);
+  const summaryData = {
+    todo: 4,
+    inProgress: 12,
+    completed: 86,
+    pendingReview: 4
+  };
 
   const moveTask = (taskId, newStatus) => {
     setTasks(prev =>

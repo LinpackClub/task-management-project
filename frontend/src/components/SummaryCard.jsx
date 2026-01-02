@@ -1,32 +1,11 @@
 import React from 'react';
-import { TrendingUp, TrendingDown } from 'lucide-react';
 
-const SummaryCard = ({ title, count, change, type }) => {
-  const getTypeStyles = () => {
-    const styles = {
-      todo: { bgColor: 'bg-blue-50', textColor: 'text-blue-700' },
-      inProgress: { bgColor: 'bg-amber-50', textColor: 'text-amber-700' },
-      completed: { bgColor: 'bg-green-50', textColor: 'text-green-700' },
-      review: { bgColor: 'bg-purple-50', textColor: 'text-purple-700' }
-    };
-    return styles[type] || styles.todo;
-  };
-
-  const styles = getTypeStyles();
-  const isPositive = change && change.includes('+');
-
+const SummaryCard = ({ title, value, change, color }) => {
   return (
-    <div className={`summary-card ${styles.bgColor}`}>
-      <div className="summary-content">
-        <h3 className="summary-title">{title}</h3>
-        <div className="summary-count">{count}</div>
-        {change && (
-          <div className={`summary-change ${isPositive ? 'positive' : 'negative'}`}>
-            {isPositive ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
-            <span>{change}</span>
-          </div>
-        )}
-      </div>
+    <div className="flex flex-col gap-2 rounded-xl bg-white dark:bg-slate-900 p-6 shadow-soft border border-slate-200 dark:border-slate-800">
+      <p className="text-base font-medium text-slate-600 dark:text-slate-400">{title}</p>
+      <p className="text-3xl font-bold text-slate-900 dark:text-white">{value}</p>
+      <p className={`text-sm font-medium ${color}`}>{change}</p>
     </div>
   );
 };

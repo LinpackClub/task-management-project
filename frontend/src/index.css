@@ -1,5 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
+
+@import "tailwindcss";
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -12,10 +17,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 a {
   font-weight: 600;
@@ -34,7 +35,6 @@ a:hover {
   --card-bg: rgba(15, 23, 42, 0.9);
 }
 
-/* global box-sizing and full-width body to avoid unexpected gaps */
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -43,7 +43,6 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  /* inherit background and text color from :root */
   background-color: inherit;
   color: inherit;
 }
@@ -84,3 +83,4 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
