@@ -10,11 +10,19 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data?.session ?? null)
-      setUser(data?.session?.user ?? null)
-      setLoading(false)
-    })
+    supabase.auth
+      .getSession()
+      .then(({ data }) => {
+        setSession(data?.session ?? null)
+        setUser(data?.session?.user ?? null)
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.error('Error fetching initial session:', error)
+        setSession(null)
+        setUser(null)
+        setLoading(false)
+      })
 
     // Listen for auth changes
     const { data: listener } = supabase.auth.onAuthStateChange((_event, currentSession) => {
