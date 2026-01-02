@@ -1,72 +1,67 @@
-import { useState } from "react";
-import SummaryCard from "./SummaryCard";
-import KanbanColumn from "./KanbanColumn";
+import React, { useState } from 'react';
+import { Plus, Calendar, Filter } from 'lucide-react';
+import NewTaskModal from './NewTaskModal';
+// Importing standard dashboard widgets
+import SummaryCard from './SummaryCard';
+import KanbanBoard from './KanbanBoard';
 
 const Dashboard = () => {
-  // Added some dummy data so the dashboard isn't empty on first load
-  const [tasks, setTasks] = useState([
-    { id: 1, title: "Design System Update", status: "inProgress" },
-    { id: 2, title: "Fix Login Redirect", status: "completed" },
-    { id: 3, title: "Database Migration", status: "todo" },
-    { id: 4, title: "Client Meeting", status: "todo" },
-    { id: 5, title: "Accessibility Audit", status: "inProgress" }
-  ]);
+  const [showModal, setShowModal] = useState(false);
 
-  const moveTask = (taskId, newStatus) => {
-    setTasks(prev =>
-      prev.map(task =>
-        task.id === taskId ? { ...task, status: newStatus } : task
-      )
-    );
-  };
-
-  const todo = tasks.filter(t => t.status === "todo");
-  const inProgress = tasks.filter(t => t.status === "inProgress");
-  const completed = tasks.filter(t => t.status === "completed");
+  // Format current date
+  const today = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
 
   return (
-    // Replaced 'dashboard-container' with a standard container
-    <div className="max-w-7xl mx-auto">
-      
-      {/* Removed <Sidebar /> and <Header /> - handled by DashboardLayout */}
-
-      <div className="flex flex-col gap-8">
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
-
-        {/* Replaced 'summary-grid' with Tailwind Grid */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <SummaryCard title="Total Tasks" count={tasks.length} />
-          <SummaryCard title="To Do" count={todo.length} />
-          <SummaryCard title="In Progress" count={inProgress.length} />
-          <SummaryCard title="Completed" count={completed.length} />
-        </div>
-
-        <div className="flex flex-col gap-4">
-          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Task Board</h2>
-
-          {/* Replaced 'kanban-board' with Tailwind Grid */}
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <KanbanColumn
-              title="To Do"
-              status="todo"
-              tasks={todo}
-              moveTask={moveTask}
-            />
-            <KanbanColumn
-              title="In Progress"
-              status="inProgress"
-              tasks={inProgress}
-              moveTask={moveTask}
-            />
-            <KanbanColumn
-              title="Completed"
-              status="completed"
-              tasks={completed}
-              moveTask={moveTask}
-            />
+    <div className="space-y-6">
+      {/* Page Specific Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
+          <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mt-1">
+            <Calendar size={14} />
+            <span>{today}</span>
           </div>
         </div>
+
+        <div className="flex items-center gap-3">
+          {/* Filter Button (Optional Placeholder) */}
+          <button className="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors shadow-sm">
+            <Filter size={18} />
+          </button>
+
+          {/* Primary Action Button */}
+          <button
+            onClick={() => setShowModal(true)}
+            className="flex items-center gap-2 px-4 py-2 text-slate-600 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white text-sm font-medium rounded-lg transition-colors shadow-sm">
+            <Plus size={18} />
+            <span>Create Task</span>
+          </button>
+        </div>
       </div>
+
+      {/* Dashboard Statistics */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <SummaryCard title="Total Tasks" count={24} icon="task" color="blue" />
+        <SummaryCard title="In Progress" count={12} icon="pending" color="orange" />
+        <SummaryCard title="Completed" count={8} icon="check_circle" color="green" />
+        <SummaryCard title="Teams" count={4} icon="group" color="purple" />
+      </div>
+
+      {/* Task Board */}
+      <div className="mt-2">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white">Task Overview</h2>
+        </div>
+        <KanbanBoard />
+      </div>
+
+      {/* Task Creation Modal */}
+      {showModal && <NewTaskModal onClose={() => setShowModal(false)} />}
     </div>
   );
 };

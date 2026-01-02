@@ -1,12 +1,11 @@
 import React from 'react';
 import { Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext'; // Import ThemeProvider
 import ProtectedRoute from './auth/ProtectedRoute';
 
 // Layout
 import DashboardLayout from './components/DashboardLayout';
-
-// FIX: Import Dashboard from 'components' instead of 'pages'
 import Dashboard from './components/Dashboard';
 
 // Other Pages
@@ -29,31 +28,30 @@ function App() {
 
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<HomeRoute />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+      <ThemeProvider> {/* Wrap App in ThemeProvider */}
+        <BrowserRouter>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<HomeRoute />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
 
-          {/* Protected Routes (Wrapped in DashboardLayout) */}
-          <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
-            <Route path="/dashboard" element={<Dashboard />} />
+            {/* Protected Routes */}
+            <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/teams" element={<TeamManagement />} />
+              <Route path="/teams/:teamName" element={<TeamDetail />} />
+              <Route path="/tasks" element={<Tasks />} />
+              <Route path="/tasks/:id" element={<TaskDetail />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/settings" element={<Settings />} />
+            </Route>
             
-            <Route path="/teams" element={<TeamManagement />} />
-            <Route path="/teams/:teamName" element={<TeamDetail />} />
-            
-            <Route path="/tasks" element={<Tasks />} />
-            <Route path="/tasks/:id" element={<TaskDetail />} />
-            
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/settings" element={<Settings />} />
-          </Route>
-          
-          {/* Catch-all */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
+            {/* Catch-all */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
     </AuthProvider>
   );
 }

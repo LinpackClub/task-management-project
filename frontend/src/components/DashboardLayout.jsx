@@ -1,20 +1,12 @@
 import React, { useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
-import TopHeader from './TopHeader';
 import NewTaskModal from './NewTaskModal';
+import { Menu } from 'lucide-react';
 
 const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const location = useLocation();
-
-  // Helper to determine title based on current path
-  const getTitle = () => {
-    const path = location.pathname.split('/')[1];
-    if (!path) return 'Dashboard';
-    return path.charAt(0).toUpperCase() + path.slice(1);
-  };
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-slate-900">
@@ -33,20 +25,25 @@ const DashboardLayout = () => {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col overflow-hidden">
-        <TopHeader 
-          title={getTitle()}
-          onMenuClick={() => setIsSidebarOpen(true)}
-          onAddTask={() => setShowModal(true)}
-        />
+      <main className="flex-1 flex flex-col overflow-hidden relative">
         
-        {/* <Outlet /> renders the current route's component (Dashboard, Teams, etc.) */}
+        {/* Mobile Sidebar Toggle - Only visible on small screens */}
+        <div className="lg:hidden p-4 pb-0">
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="p-2 rounded-lg bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300"
+          >
+            <Menu size={20} />
+          </button>
+        </div>
+
+        {/* Main Route Content */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-8">
           <Outlet />
         </div>
       </main>
 
-      {/* Global Modal */}
+      {/* Global Modal (kept in DOM if triggered elsewhere, or you can remove this if unused) */}
       {showModal && <NewTaskModal onClose={() => setShowModal(false)} />}
     </div>
   );
