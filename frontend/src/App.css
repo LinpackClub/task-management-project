@@ -71,8 +71,8 @@ body {
   background: #c82333 !important;
 }
 
-/* Main Content */
-.main-content {
+/* FIX: Renamed from .main-content to .auth-layout to avoid conflict with Dashboard */
+.auth-layout {
   flex: 1;
   display: flex;
   align-items: center;
@@ -264,7 +264,8 @@ body {
     font-size: 1.25rem;
   }
   
-  .main-content {
+  /* Updated this reference as well */
+  .auth-layout {
     padding: 1rem;
   }
   
